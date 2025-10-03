@@ -1,4 +1,4 @@
-# 🏦 Lenme API - Peer-to-Peer Lending Platform
+# Lenme API - Peer-to-Peer Lending Platform
 
 ## Project Overview
 
@@ -58,12 +58,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-7. **Run tests**
-```bash
-pytest
-```
-
-8. **Start the application**
+7. **Start the application**
 ```bash
 # Terminal 1: Start Django server
 python manage.py runserver
@@ -73,6 +68,11 @@ celery -A core worker --loglevel=info
 
 # Terminal 3: Start Celery Beat scheduler
 celery -A core beat --loglevel=info
+```
+
+8. **Run tests**
+```bash
+pytest
 ```
 
 The API will be available at `http://localhost:8000/`
