@@ -16,7 +16,6 @@ class UserProfile(models.Model):
 class Loan(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
-        ("offered", "Offered"),
         ("funded", "Funded"),
         ("completed", "Completed"),
     ]
