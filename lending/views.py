@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.cache import cache
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 from .models import Loan, LoanOffer, UserProfile
@@ -119,6 +120,9 @@ class CreateLoanView(APIView):
             status="pending",
         )
 
+        # Invalidate cache when new loan is created
+        cache.delete("available_loans")
+
         serializer = LoanSerializer(loan)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -131,8 +135,16 @@ class AvailableLoansView(APIView):
     """
 
     def get(self, request):
+        cached_loans = cache.get("available_loans")
+        if cached_loans is not None:
+            return Response(cached_loans)
+
         loans = Loan.objects.filter(lender__isnull=True, status="pending")
         serializer = LoanSerializer(loans, many=True)
+
+        # Cache the results
+        cache.set("available_loans", serializer.data, None)
+
         return Response(serializer.data)
 
 
@@ -263,6 +275,9 @@ class AcceptOfferView(APIView):
 
         offer.is_accepted = True
         offer.save()
+
+        # Invalidate cache when loan status changes
+        cache.delete("available_loans")
 
         # Schedule payments
         self._create_payment_schedule(loan)
