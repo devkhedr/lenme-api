@@ -99,6 +99,7 @@ The API will be available at `http://localhost:8000/`
 - **Balance Management**: Account balance tracking and validation
 - **Payment Calculations**: Simple interest calculations for monthly payments
 - **Automated Tasks**: Celery-powered background repayment processing
+- **Caching**: Optimized available loans listing with automatic cache invalidation
 - **Unit Testing**: Comprehensive pytest test suite (30 tests covering complete workflow)
 - **API Documentation**: Swagger/OpenAPI integration
 
@@ -297,6 +298,15 @@ pytest tests/test_lending_workflow.py  # Specific workflow tests
 - Platform fee calculations
 - Error handling and edge cases
 - Integration testing end-to-end flow
+
+
+## Caching
+
+The system caches available loans (loans without lenders) to improve performance:
+
+- **Cached Data**: Loans with no lender and 'pending' status
+- **Cache Expires**: When a new loan is created or loan status changes
+- **Benefit**: Faster `/api/lending/loan-list/` response times with automatic synchronization
 
 
 ## Background Tasks
