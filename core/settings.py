@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     "rest_framework",
     "drf_yasg",
+    "django_celery_beat",
     # local apps
     "lending",
     "payment",
@@ -132,3 +133,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "process-loan-repayments": {
+        "task": "lending.tasks.process_loan_repayments",
+        "schedule": crontab(minute=0),  # Run every hour at the top of the hour
+    },
+}
