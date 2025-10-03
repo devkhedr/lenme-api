@@ -23,8 +23,6 @@ class CreateUserView(APIView):
     - username: Unique username
     - email: User email
     - password: Password (min 8 characters)
-    - first_name: First name
-    - last_name: Last name
     - user_type: "borrower" or "lender"
     - balance: Initial balance (optional, default: 0)
     """
