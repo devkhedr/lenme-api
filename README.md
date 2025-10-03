@@ -211,6 +211,12 @@ POST /api/payment/make/
 }
 ```
 
+#### 8. Get Payments for a Specific Loan
+```http
+GET /api/payment/loan/1/
+```
+Returns all payments (pending and paid) for the loan.
+
 ## Business Logic Implementation
 
 ### Payment Calculation (Simple Interest)
